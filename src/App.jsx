@@ -62,6 +62,13 @@ function App() {
         nombre: 'Doctor 7',
         experiencia: '5 años',
         descripcion: 'Descripcion del doctor 4 que tiene 9 años de experiencia',
+        especialidad: 'Pediatria'
+      },
+      {
+        id: 8,
+        nombre: 'Doctor 8',
+        experiencia: '9',
+        descripcion: 'Descripcion del doctor 8 que tiene 9 años de experiencia',
         especialidad: 'Examenes'
       }
     ];

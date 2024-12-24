@@ -1,35 +1,52 @@
 import React, { useState, useRef, useEffect } from "react";
+import PropTypes from "prop-types";
 
 export default function ApoinmentForm({ doctores }) {
 
+    // Estado para el doctor seleccionado
     const [doctorSeleccionado, setDoctorSeleccionado] = useState('');
+    // Estado para el nombre del paciente
     const [nombrePaciente, setnombrePaciente] = useState('');
+    // Estado para la fecha de la cita
     const [fechaCita, setfechaCita] = useState('');
-    const nombrePacienteInputRef = useRef(null); // Referencia al campo nombre
-    const fechaCitaInputRef = useRef(null); //referencia para enfocar con callback
+
+    // Referencia al campo de entrada del nombre del paciente
+    const nombrePacienteInputRef = useRef(null);
+    // Referencia al campo de entrada de la fecha de la cita
+    const fechaCitaInputRef = useRef(null);
+
 
     useEffect(() => {
+        // Enfoca el campo nombre al montar el componente
         if (nombrePacienteInputRef.current) {
-            nombrePacienteInputRef.current.focus(); // Enfoca el campo nombre al montar
+            nombrePacienteInputRef.current.focus();
         }
     }, []); // El array vacio para que se ejecute solo una vez al montar
 
+    // Manejador para el cambio en la selección del doctor
     const handleSelectChange = (event) => {
         setDoctorSeleccionado(event.target.value);
     };
 
+    // Manejador para el cambio en el nombre del paciente
     const handleInputChange = (event) => {
         setnombrePaciente(event.target.value);
     };
+
+      // Manejador para el cambio en la fecha de la cita
     const handleCitaChange = (event) => {
         setfechaCita(event.target.value);
     };
+
+     // Función para enfocar el campo de fecha de la cita
     const focusFechaCitaInput = (element) => {
         if (element) {
             element.focus()
             console.log("input enfocado")
         }
     }
+
+    // Manejador para el envío del formulario
     const handleSubmit = (event) => {
         event.preventDefault(); // Evita el comportamiento predeterminado del formulario
         console.log("Nombre ingresado en el input:", nombrePaciente);
@@ -38,10 +55,16 @@ export default function ApoinmentForm({ doctores }) {
             doctores.find((d) => d.id === Number(doctorSeleccionado))?.especialidad || "Ninguno"
         );
         console.log("Fecha de la Cita:", fechaCita);
+         // Enfocar el campo de fecha de cita despues del submit
         if (fechaCitaInputRef.current) {
             focusFechaCitaInput(fechaCitaInputRef.current)
         }
     };
+    // Manejo de error en caso de que no haya doctores
+    if (!doctores || doctores.length === 0) {
+        return <div>No hay doctores disponibles para seleccionar.</div>
+    }
+
     return (
         <>
             <form className="container" onSubmit={handleSubmit}>
@@ -89,3 +112,13 @@ export default function ApoinmentForm({ doctores }) {
         </>
     );
 }
+
+// Definición de los PropTypes
+ApoinmentForm.propTypes = {
+    doctores: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            especialidad: PropTypes.string.isRequired,
+        })
+    ).isRequired,
+};
